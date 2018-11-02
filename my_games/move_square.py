@@ -38,7 +38,7 @@ def main():
     # define a variable to control the main loop
     running = True
 
-    # main loop
+    # game loop
     while running:
 
         # event handling, gets all events from the eventqueue
