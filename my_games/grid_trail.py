@@ -1,6 +1,7 @@
 
 
 import pygame
+import random
 import sys
 
 
@@ -12,6 +13,7 @@ BG_COLOR = pygame.Color('black')
 BLOCK_PX_WIDTH = 10
 BLOCK_PX_HEIGHT = 10
 BLOCK_COLOR = pygame.Color('gray30')
+BLOCK_SELECTED_COLOR = pygame.Color('green')
 BLOCK_STROKE_COLOR = pygame.Color('black')
 BLOCK_STROKE_PX_WIDTH = 1
 
@@ -57,14 +59,24 @@ class Block(GameObject):
 			BLOCK_STROKE_PX_WIDTH * -1
 		)
 		self.surface.fill(color=BLOCK_COLOR, rect=block_color_rect)
-	def update(self):
+	def update_init(self):
 		self.draw_color(
 			color=BLOCK_COLOR,
 			stroke_color=BLOCK_STROKE_COLOR,
 			stroke_width=BLOCK_STROKE_PX_WIDTH
 		)
-		self.parent.blit(self.surface, (self.x, self.y))
-		# super().update()
+		super().update()
+	def update_selected(self):
+		self.draw_color(
+			color=BLOCK_SELECTED_COLOR,
+			stroke_color=BLOCK_STROKE_COLOR,
+			stroke_width=BLOCK_STROKE_PX_WIDTH
+		)
+		super().update()
+	def get_is_selected(self):
+		return self.is_selected
+	def get_grid_index(self):
+		return self.grid_index
 	def inspect(self):
 		print({
 			'rect':	self.get_pos_rect(),
@@ -73,11 +85,19 @@ class Block(GameObject):
 
 class Grid():
 	def __init__(self, screen, width, height, block_size):
+		DIRECTION_UP = 'up'
+		DIRECTION_DOWN = 'down'
+		DIRECTION_LEFT = 'left'
+		DIRECTION_RIGHT = 'right'
 		self.width = width
 		self.height = height
 		self.block_width_px = block_size[0]
 		self.block_height_px = block_size[1]
 		self.grid = []
+		# single dimension array for easy iteration
+		self.block_list = []
+		self.updated_blocks = []
+		self.selected_block = None
 		for i in range(0, self.height):
 			row = []
 			for k in range(0, width):
@@ -88,16 +108,38 @@ class Grid():
 					y_pos=i * self.block_height_px,
 					grid_index=(k, i)
 				)
+				self.block_list.append(block)
 				row.append(block)
 			self.grid.append(row)
-	def update(self):
-		for row in self.grid:
-			for block in row:
-				block.update()
+	def update_init(self):
+		for block in self.block_list:
+			block.update_init()
+	def update_selected(self):
+		self.selected_block.update_selected()
+	def get_updated_rect(self):
+		return self.selected_block.get_pos_rect()
+	def select_block(self, block):
+		self.selected_block = block
+	def select_random_block(self):
+		self.selected_block = random.choice(self.block_list)
+	def get_block_at_grid_index(self, grid_index):
+		x, y = grid_index
+		block = self.grid[y][x]
+		return block
+	def get_adjacent_block_from_selected(self, direction):
+		x, y = self.selected_block.get_grid_index()
+		if direction == self.DIRECTION_UP:
+			y = y - 1
+		elif direction == self.DIRECTION_DOWN:
+			y = y + 1
+		elif direction == self.DIRECTION_LEFT:
+			x = x - 1
+		elif direction == self.DIRECTION_RIGHT:
+			x = x + 1
+		return self.get_block_at_grid_index((x, y))
 	def inspect(self):
-		for row in self.grid:
-			for block in row:
-				block.inspect()
+		for block in self.block_list:
+			block.inspect()
 
 
 def main():
@@ -126,8 +168,13 @@ def main():
 		height=GRID_HEIGHT_BLOCKS,
 		block_size=(BLOCK_PX_WIDTH, BLOCK_PX_HEIGHT)
 	)
-	# update all the blocks in the grid
-	grid.update()
+	# set random block as selected
+	grid.select_random_block()
+	# update all the blocks in the grid as initialization step
+	grid.update_init()
+
+	# initialize with entire display update
+	pygame.display.update()
 
 	# game loop
 	running = True
@@ -141,13 +188,16 @@ def main():
 				if event.key == pygame.K_ESCAPE or event.unicode == 'q':
 					running = False
 
+		# TODO: block selection logic based on user input here...
+
 		# update game objects
 		background.update()
-		grid.update()
+		grid.update_selected()
 
-		# update display
-		pygame.display.update()
+		# update display only highlight blocks
+		pygame.display.update(grid.get_updated_rect())
 
 
 if __name__=="__main__":
 	main()
+
