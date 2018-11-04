@@ -13,10 +13,10 @@ BLOCK_PX_WIDTH = 10
 BLOCK_PX_HEIGHT = 10
 BLOCK_COLOR = pygame.Color('gray30')
 BLOCK_STROKE_COLOR = pygame.Color('black')
-BLOCK_STROKE_PX_WIDTH = 2
+BLOCK_STROKE_PX_WIDTH = 1
 
-GRID_WIDTH_BLOCKS = int(SCREEN_PX_WIDTH / GRID_BLOCK_PX_WIDTH)
-GRID_HEIGHT_BLOCKS = int(SCREEN_PX_HEIGHT / GRID_BLOCK_PX_HEIGHT)
+GRID_WIDTH_BLOCKS = int(SCREEN_PX_WIDTH / BLOCK_PX_WIDTH)
+GRID_HEIGHT_BLOCKS = int(SCREEN_PX_HEIGHT / BLOCK_PX_HEIGHT)
 
 
 class GameObject():
@@ -47,15 +47,29 @@ class Block(GameObject):
 			y_pos=y_pos
 		)
 		self.grid_index = grid_index
-	def draw(self, color, stroke_color, stroke_width):
-		pass
+	def draw_color(self, color, stroke_color, stroke_width):
+		# block stroke fill
+		stroke_rect = self.surface.get_rect()
+		self.surface.fill(color=stroke_color, rect=stroke_rect)
+		# block color fill
+		block_color_rect = self.surface.get_rect().inflate(
+			BLOCK_STROKE_PX_WIDTH * -1,
+			BLOCK_STROKE_PX_WIDTH * -1
+		)
+		self.surface.fill(color=BLOCK_COLOR, rect=block_color_rect)
 	def update(self):
-		self.draw(
+		self.draw_color(
 			color=BLOCK_COLOR,
 			stroke_color=BLOCK_STROKE_COLOR,
 			stroke_width=BLOCK_STROKE_PX_WIDTH
 		)
-		self.update()
+		self.parent.blit(self.surface, (self.x, self.y))
+		# super().update()
+	def inspect(self):
+		print({
+			'rect':	self.get_pos_rect(),
+			'pos': [self.x, self.y]
+		})
 
 class Grid():
 	def __init__(self, screen, width, height, block_size):
@@ -80,6 +94,10 @@ class Grid():
 		for row in self.grid:
 			for block in row:
 				block.update()
+	def inspect(self):
+		for row in self.grid:
+			for block in row:
+				block.inspect()
 
 
 def main():
@@ -95,10 +113,10 @@ def main():
 	background = GameObject(
 		surface=pygame.Surface(screen.get_size()),
 		parent=screen,
-		color=BG_COLOR,
 		x_pos=0,
 		y_pos=0
 	)
+	background.surface.fill(color=BG_COLOR)
 	background.update()
 
 	# grid
@@ -106,8 +124,9 @@ def main():
 		screen=screen,
 		width=GRID_WIDTH_BLOCKS,
 		height=GRID_HEIGHT_BLOCKS,
-		block_size=(GRID_BLOCK_PX_WIDTH, GRID_BLOCK_PX_HEIGHT)
+		block_size=(BLOCK_PX_WIDTH, BLOCK_PX_HEIGHT)
 	)
+	# update all the blocks in the grid
 	grid.update()
 
 	# game loop
