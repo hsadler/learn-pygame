@@ -121,8 +121,11 @@ class Grid():
 		self.selected_block = random.choice(self.block_list)
 	def get_block_at_grid_index(self, grid_index):
 		x, y = grid_index
-		block = self.grid[y][x]
-		return block
+		if y >= 0 and y < len(self.grid):
+			row = self.grid[y]
+			if x >= 0 and x < len(row):
+				return row[x]
+		return None
 	def get_direction_from_user_input(self):
 		pressed = pygame.key.get_pressed()
 		if pressed[pygame.K_w]:
@@ -159,16 +162,6 @@ def main():
 	# create a surface on screen
 	screen = pygame.display.set_mode((SCREEN_PX_WIDTH, SCREEN_PX_HEIGHT))
 
-	# background
-	# background = GameObject(
-	# 	surface=pygame.Surface(screen.get_size()),
-	# 	parent=screen,
-	# 	x_pos=0,
-	# 	y_pos=0
-	# )
-	# background.surface.fill(color=BG_COLOR)
-	# background.update()
-
 	# grid
 	grid = Grid(
 		screen=screen,
@@ -202,11 +195,10 @@ def main():
 			new_selected_block = grid.get_adjacent_block_from_selected(
 				direction=direction
 			)
-			grid.select_block(new_selected_block)
+			if new_selected_block:
+				grid.select_block(new_selected_block)
 
 		# update game objects
-		# background.update()
-		# grid.update()
 		grid.update_selected()
 
 		# update display only selected block
