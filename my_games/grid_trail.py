@@ -5,6 +5,8 @@ import random
 import sys
 
 
+GAME_LOOP_RATE = 30
+
 SCREEN_PX_WIDTH = 1000
 SCREEN_PX_HEIGHT = 700
 
@@ -161,6 +163,8 @@ def main():
 	pygame.display.set_caption("game template")
 	# create a surface on screen
 	screen = pygame.display.set_mode((SCREEN_PX_WIDTH, SCREEN_PX_HEIGHT))
+	# get instance of the game clock
+	game_clock = pygame.time.Clock()
 
 	# grid
 	grid = Grid(
@@ -203,6 +207,9 @@ def main():
 
 		# update display only selected block
 		pygame.display.update(grid.get_updated_rect())
+
+		# lock game loop rate
+		game_clock.tick(GAME_LOOP_RATE)
 
 
 if __name__=="__main__":
