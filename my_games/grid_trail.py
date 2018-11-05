@@ -58,17 +58,11 @@ class Block(GameObject):
 			BLOCK_STROKE_PX_WIDTH * -1,
 			BLOCK_STROKE_PX_WIDTH * -1
 		)
-		self.surface.fill(color=BLOCK_COLOR, rect=block_color_rect)
-	def update_init(self):
+		self.surface.fill(color=color, rect=block_color_rect)
+	def update(self, is_selected=False):
+		color = BLOCK_SELECTED_COLOR if is_selected else BLOCK_COLOR
 		self.draw_color(
-			color=BLOCK_COLOR,
-			stroke_color=BLOCK_STROKE_COLOR,
-			stroke_width=BLOCK_STROKE_PX_WIDTH
-		)
-		super().update()
-	def update_selected(self):
-		self.draw_color(
-			color=BLOCK_SELECTED_COLOR,
+			color=color,
 			stroke_color=BLOCK_STROKE_COLOR,
 			stroke_width=BLOCK_STROKE_PX_WIDTH
 		)
@@ -84,11 +78,13 @@ class Block(GameObject):
 		})
 
 class Grid():
+
+	DIRECTION_UP = 'up'
+	DIRECTION_DOWN = 'down'
+	DIRECTION_LEFT = 'left'
+	DIRECTION_RIGHT = 'right'
+
 	def __init__(self, screen, width, height, block_size):
-		DIRECTION_UP = 'up'
-		DIRECTION_DOWN = 'down'
-		DIRECTION_LEFT = 'left'
-		DIRECTION_RIGHT = 'right'
 		self.width = width
 		self.height = height
 		self.block_width_px = block_size[0]
@@ -111,11 +107,12 @@ class Grid():
 				self.block_list.append(block)
 				row.append(block)
 			self.grid.append(row)
-	def update_init(self):
+	def update(self):
 		for block in self.block_list:
-			block.update_init()
+			is_selected = self.selected_block == block
+			block.update(is_selected=is_selected)
 	def update_selected(self):
-		self.selected_block.update_selected()
+		self.selected_block.update(is_selected=True)
 	def get_updated_rect(self):
 		return self.selected_block.get_pos_rect()
 	def select_block(self, block):
@@ -126,6 +123,17 @@ class Grid():
 		x, y = grid_index
 		block = self.grid[y][x]
 		return block
+	def get_direction_from_user_input(self):
+		pressed = pygame.key.get_pressed()
+		if pressed[pygame.K_w]:
+			return self.DIRECTION_UP
+		elif pressed[pygame.K_d]:
+			return self.DIRECTION_RIGHT
+		elif pressed[pygame.K_a]:
+			return self.DIRECTION_LEFT
+		elif pressed[pygame.K_s]:
+			return self.DIRECTION_DOWN
+		return None
 	def get_adjacent_block_from_selected(self, direction):
 		x, y = self.selected_block.get_grid_index()
 		if direction == self.DIRECTION_UP:
@@ -152,14 +160,14 @@ def main():
 	screen = pygame.display.set_mode((SCREEN_PX_WIDTH, SCREEN_PX_HEIGHT))
 
 	# background
-	background = GameObject(
-		surface=pygame.Surface(screen.get_size()),
-		parent=screen,
-		x_pos=0,
-		y_pos=0
-	)
-	background.surface.fill(color=BG_COLOR)
-	background.update()
+	# background = GameObject(
+	# 	surface=pygame.Surface(screen.get_size()),
+	# 	parent=screen,
+	# 	x_pos=0,
+	# 	y_pos=0
+	# )
+	# background.surface.fill(color=BG_COLOR)
+	# background.update()
 
 	# grid
 	grid = Grid(
@@ -171,7 +179,7 @@ def main():
 	# set random block as selected
 	grid.select_random_block()
 	# update all the blocks in the grid as initialization step
-	grid.update_init()
+	grid.update()
 
 	# initialize with entire display update
 	pygame.display.update()
@@ -188,13 +196,20 @@ def main():
 				if event.key == pygame.K_ESCAPE or event.unicode == 'q':
 					running = False
 
-		# TODO: block selection logic based on user input here...
+		# block selection based on user input
+		direction = grid.get_direction_from_user_input()
+		if direction is not None:
+			new_selected_block = grid.get_adjacent_block_from_selected(
+				direction=direction
+			)
+			grid.select_block(new_selected_block)
 
 		# update game objects
-		background.update()
+		# background.update()
+		# grid.update()
 		grid.update_selected()
 
-		# update display only highlight blocks
+		# update display only selected block
 		pygame.display.update(grid.get_updated_rect())
 
 
