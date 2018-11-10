@@ -1,0 +1,26 @@
+
+# game object base class for all objects in game
+
+
+class GameObject():
+
+	def __init__(self, surface, parent, x_pos, y_pos):
+		self.surface = surface
+		self.parent = parent
+		self.x = x_pos
+		self.y = y_pos
+
+	def move(self, x_amount, y_amount):
+		self.x += x_amount
+		self.y += y_amount
+
+	def update(self):
+		self.parent.blit(self.surface, (self.x, self.y))
+
+	def get_pos_rect(self):
+		return self.surface.get_rect(
+			center=(
+				self.x + self.surface.get_width() / 2,
+				self.y + self.surface.get_height() / 2
+			)
+		)
