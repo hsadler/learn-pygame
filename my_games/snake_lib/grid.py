@@ -1,4 +1,7 @@
 
+from snake_lib.game_object_list import GameObjectList
+from snake_lib.block import Block
+
 # game grid for holding block game objects
 
 
@@ -9,47 +12,30 @@ class Grid(GameObjectList):
 	DIRECTION_LEFT = 'left'
 	DIRECTION_RIGHT = 'right'
 
-	def __init__(self, pygame, screen, width, height, block_size):
-		self.pygame = pygame
-		self.width = width
-		self.height = height
-		self.block_width_px = block_size[0]
-		self.block_height_px = block_size[1]
+	def __init__(self, game):
+		self.game = game
+		self.blocks_width = self.game.config.GRID_WIDTH_BLOCKS
+		self.blocks_height = self.game.config.GRID_HEIGHT_BLOCKS
+		self.block_width_px = self.game.config.BLOCK_PX_WIDTH
+		self.block_height_px = self.game.config.BLOCK_PX_HEIGHT
 		self.grid = []
 		# single dimension array for easy iteration
 		self.block_list = []
-		self.updated_blocks = []
-		self.selected_block = None
-		for i in range(0, self.height):
+		for i in range(0, self.blocks_height):
 			row = []
-			for k in range(0, width):
+			for k in range(0, self.blocks_width):
 				block = Block(
-					surface=self.pygame.Surface(block_size),
-					parent=screen,
+					surface=self.game.pygame.Surface(
+						(self.block_width_px, self.block_height_px)
+					),
+					parent=self.game.screen,
 					x_pos=k * self.block_width_px,
 					y_pos=i * self.block_height_px,
 					grid_index=(k, i)
 				)
-				self.block_list.append(block)
 				row.append(block)
+				self.block_list.append(block)
 			self.grid.append(row)
-
-	def update(self):
-		for block in self.block_list:
-			is_selected = self.selected_block == block
-			block.update(is_selected=is_selected)
-
-	def update_selected(self):
-		self.selected_block.update(is_selected=True)
-
-	def get_updated_rect(self):
-		return self.selected_block.get_pos_rect()
-
-	def select_block(self, block):
-		self.selected_block = block
-
-	def select_random_block(self):
-		self.selected_block = random.choice(self.block_list)
 
 	def get_block_at_grid_index(self, grid_index):
 		x, y = grid_index
