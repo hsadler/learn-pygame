@@ -1,10 +1,11 @@
 
-# game object base class for all objects in game
+# game model base class for all objects in game
 
 
-class GameObject():
+class GameModel():
 
-	def __init__(self, surface, parent, x_pos, y_pos):
+	def __init__(self, game, surface, parent, x_pos, y_pos):
+		self.game = game
 		self.surface = surface
 		self.parent = parent
 		self.x = x_pos

@@ -1,12 +1,14 @@
 
-# game object list base class for all objects collections in game
+# game model list base class for all object collections in game
 
 
-class GameObjectList():
+class GameModelList():
 
-	def __init__(self, game_objects=[]):
-		self.game_objects = game_objects
+	def __init__(self, game_models=[]):
+		self.game_models = game_models
 
+	def add_game_model(self, game_model):
+		self.game_models.append(game_model)
 
-	def get_game_objects(self):
-		return self.game_objects
+	def get_game_models(self):
+		return self.game_models

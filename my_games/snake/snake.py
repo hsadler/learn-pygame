@@ -3,11 +3,11 @@ import sys
 
 from lib.model.config import Config
 from lib.model.game import Game
-# from lib.block import Block
-# from lib.grid import Grid
+from lib.model.grid import Grid
+from lib.model.block import Block
 # from lib.snake import Snake
 
-from lib.business.game_logic import GameBL
+from lib.business.game import GameBL
 
 
 def main():
@@ -19,12 +19,23 @@ def main():
 	game = Game(config=config)
 
 	# create game objects
-	# grid = Grid(game=game)
+	grid = Grid(
+		game=game,
+		block_class=Block,
+		block_size=(
+			config.BLOCK_PX_WIDTH,
+			config.BLOCK_PX_HEIGHT
+		),
+		grid_dimensions=(
+			config.GRID_WIDTH_BLOCKS,
+			config.GRID_HEIGHT_BLOCKS
+		)
+	)
+	grid.initialize()
+	# snake = Snake(game=game)
 
-	# instantiate game manager
-	# game = Game(pygame=pygame, config=config)
 	# initialize with entire display update
-	# game.init_display()
+	game.init_display()
 
 	# game loop
 	while game.get_running():

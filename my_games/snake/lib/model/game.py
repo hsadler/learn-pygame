@@ -19,3 +19,6 @@ class Game():
 
 	def get_running(self):
 		return self.running
+
+	def init_display(self):
+		self.pygame.display.update()

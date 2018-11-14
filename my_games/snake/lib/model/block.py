@@ -1,13 +1,14 @@
 
-from snake_lib.game_object import GameObject
+from lib.model.game_model import GameModel
 
 # block game object
 
 
-class Block(GameObject):
+class Block(GameModel):
 
-	def __init__(self, surface, parent, x_pos, y_pos, grid_index):
+	def __init__(self, game, surface, parent, x_pos, y_pos, grid_index):
 		super().__init__(
+			game=game,
 			surface=surface,
 			parent=parent,
 			x_pos=x_pos,
@@ -21,22 +22,18 @@ class Block(GameObject):
 		self.surface.fill(color=stroke_color, rect=stroke_rect)
 		# block color fill
 		block_color_rect = self.surface.get_rect().inflate(
-			BLOCK_STROKE_PX_WIDTH * -1,
-			BLOCK_STROKE_PX_WIDTH * -1
+			stroke_width * -1,
+			stroke_width * -1
 		)
 		self.surface.fill(color=color, rect=block_color_rect)
 
-	def update(self, is_selected=False):
-		color = BLOCK_SELECTED_COLOR if is_selected else BLOCK_COLOR
+	def update(self):
 		self.draw_color(
-			color=color,
-			stroke_color=BLOCK_STROKE_COLOR,
-			stroke_width=BLOCK_STROKE_PX_WIDTH
+			color=self.game.config.BLOCK_COLOR,
+			stroke_color=self.game.config.BLOCK_STROKE_COLOR,
+			stroke_width=self.game.config.BLOCK_STROKE_PX_WIDTH
 		)
 		super().update()
-
-	def get_is_selected(self):
-		return self.is_selected
 
 	def get_grid_index(self):
 		return self.grid_index
