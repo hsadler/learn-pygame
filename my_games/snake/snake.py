@@ -32,6 +32,12 @@ def main():
 		)
 	)
 	grid.initialize()
+
+	# test setting a random block on
+	rand_block = grid.get_random_block()
+	rand_block.set_state(Block.STATE_ON)
+	rand_block.update()
+
 	# snake = Snake(game=game)
 
 	# initialize with entire display update

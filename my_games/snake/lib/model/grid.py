@@ -1,4 +1,5 @@
 
+import random
 from lib.model.game_model_list import GameModelList
 from lib.model.block import Block
 
@@ -17,19 +18,19 @@ class Grid(GameModelList):
 		self.game = game
 		self.Block = block_class
 		self.grid = []
-		block_width_px, block_height_px = block_size
-		grid_width, grid_height = grid_dimensions
-		for i in range(0, grid_height):
+		self.block_width_px, self.block_height_px = block_size
+		self.grid_width, self.grid_height = grid_dimensions
+		for i in range(0, self.grid_height):
 			row = []
-			for k in range(0, grid_width):
+			for k in range(0, self.grid_width):
 				block = self.Block(
 					game=game,
 					surface=self.game.pygame.Surface(
-						(block_width_px, block_height_px)
+						(self.block_width_px, self.block_height_px)
 					),
 					parent=self.game.screen,
-					x_pos=k * block_width_px,
-					y_pos=i * block_height_px,
+					x_pos=k * self.block_width_px,
+					y_pos=i * self.block_height_px,
 					grid_index=(k, i)
 				)
 				row.append(block)
@@ -59,6 +60,11 @@ class Grid(GameModelList):
 		elif direction == self.DIRECTION_RIGHT:
 			x = x + 1
 		return self.get_block_at_grid_index((x, y))
+
+	def get_random_block(self):
+		row = random.choice(self.grid)
+		block = random.choice(row)
+		return block
 
 	def inspect(self):
 		for block in self.get_game_models():
