@@ -42,7 +42,10 @@ def main():
 
 	# game loop
 	while game.get_running():
-		GameBL.run(config=config, game=game)
+		GameBL.run(
+			config=config,
+			game=game
+		)
 
 
 if __name__=="__main__":

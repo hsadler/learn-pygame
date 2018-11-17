@@ -16,8 +16,6 @@ class Config():
 
 	BLOCK_PX_WIDTH = 10
 	BLOCK_PX_HEIGHT = 10
-	BLOCK_COLOR_OFF = pygame.Color('gray30')
-	BLOCK_COLOR_ON = pygame.Color('green')
 	BLOCK_STROKE_COLOR = pygame.Color('black')
 	BLOCK_STROKE_PX_WIDTH = 1
 
