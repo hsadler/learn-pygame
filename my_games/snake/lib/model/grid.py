@@ -15,11 +15,10 @@ class Grid(GameModelList):
 
 	def __init__(self, game, block_class, block_size, grid_dimensions):
 		super().__init__(game=game)
-		# self.game = game
 		self.Block = block_class
-		self.grid = []
 		self.block_width_px, self.block_height_px = block_size
 		self.grid_width, self.grid_height = grid_dimensions
+		self.grid = []
 		for i in range(0, self.grid_height):
 			row = []
 			for k in range(0, self.grid_width):
@@ -36,6 +35,7 @@ class Grid(GameModelList):
 				row.append(block)
 				self.add_game_model(block)
 			self.grid.append(row)
+		self.occupied_blocks = {}
 
 	def initialize(self):
 		config = self.game.config
@@ -80,6 +80,17 @@ class Grid(GameModelList):
 		for i in range(line_start_index, line_end_index):
 			line_blocks.append(row[i])
 		return line_blocks
+
+	def get_parimeter(self):
+		top_blocks = self.grid[0]
+		bottom_blocks = self.grid[len(self.grid) - 1]
+		left_blocks = []
+		right_blocks = []
+		for index, row in enumerate(self.grid):
+			if index != 0 or index != len(row) - 1:
+				left_blocks.append(row[0])
+				right_blocks.append(row[len(row) - 1])
+		return top_blocks + bottom_blocks + left_blocks + right_blocks
 
 	def inspect(self):
 		for block in self.get_game_models():

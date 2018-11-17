@@ -6,7 +6,16 @@ from lib.model.game_model import GameModel
 
 class Block(GameModel):
 
-	def __init__(self, game, surface, parent, x_pos, y_pos, grid_index):
+	def __init__(
+		self,
+		game,
+		surface,
+		parent,
+		x_pos,
+		y_pos,
+		grid_index,
+		collidable=False
+	):
 		super().__init__(
 			game=game,
 			surface=surface,
@@ -15,6 +24,7 @@ class Block(GameModel):
 			y_pos=y_pos
 		)
 		self.grid_index = grid_index
+		self.collidable = collidable
 
 	def draw_color(self, color, stroke_color, stroke_width):
 		# block stroke fill

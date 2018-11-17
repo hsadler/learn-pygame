@@ -18,7 +18,7 @@ def main():
 	# create stateful game manager
 	game = Game(config=config)
 
-	# create game objects
+	# create grid
 	grid = Grid(
 		game=game,
 		block_class=Block,
@@ -33,9 +33,15 @@ def main():
 	)
 	grid.initialize()
 
+	# create snake
 	rand_grid_line = grid.get_random_line(5)
 	snake = Snake(game=game, game_models=rand_grid_line)
 	snake.update()
+
+	# create wall
+	grid_parimeter = grid.get_parimeter()
+	print(grid_parimeter)
+	# wall = Wall(game=game, game_models=grid_parimeter)
 
 	# initialize with entire display update
 	game.init_display()
@@ -44,7 +50,9 @@ def main():
 	while game.get_running():
 		GameBL.run(
 			config=config,
-			game=game
+			game=game,
+			grid=grid,
+			snake=snake
 		)
 
 

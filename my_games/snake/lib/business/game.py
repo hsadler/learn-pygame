@@ -5,7 +5,7 @@
 class GameBL():
 
 	@staticmethod
-	def run(config, game):
+	def run(config, game, grid, snake):
 		"""
 		game loop main method
 		"""
