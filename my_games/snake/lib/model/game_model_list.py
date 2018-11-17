@@ -4,7 +4,8 @@
 
 class GameModelList():
 
-	def __init__(self, game_models=[]):
+	def __init__(self, game, game_models=[]):
+		self.game = game
 		self.game_models = game_models
 
 	def add_game_model(self, game_model):

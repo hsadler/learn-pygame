@@ -21,6 +21,10 @@ class Config():
 	BLOCK_STROKE_COLOR = pygame.Color('black')
 	BLOCK_STROKE_PX_WIDTH = 1
 
+	GRID_BLOCK_COLOR = pygame.Color('gray30')
+	SNAKE_BLOCK_COLOR = pygame.Color('green')
+	WALL_BLOCK_COLOR = pygame.Color('red')
+
 	GRID_WIDTH_BLOCKS = int(SCREEN_PX_WIDTH / BLOCK_PX_WIDTH)
 	GRID_HEIGHT_BLOCKS = int(SCREEN_PX_HEIGHT / BLOCK_PX_HEIGHT)
 

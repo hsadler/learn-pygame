@@ -14,8 +14,8 @@ class Grid(GameModelList):
 	DIRECTION_RIGHT = 'right'
 
 	def __init__(self, game, block_class, block_size, grid_dimensions):
-		super().__init__()
-		self.game = game
+		super().__init__(game=game)
+		# self.game = game
 		self.Block = block_class
 		self.grid = []
 		self.block_width_px, self.block_height_px = block_size
@@ -38,7 +38,13 @@ class Grid(GameModelList):
 			self.grid.append(row)
 
 	def initialize(self):
+		config = self.game.config
 		for block in self.get_game_models():
+			block.draw_color(
+				color=config.GRID_BLOCK_COLOR,
+				stroke_color=config.BLOCK_STROKE_COLOR,
+				stroke_width=config.BLOCK_STROKE_PX_WIDTH
+			)
 			block.update()
 
 	def get_block_at_grid_index(self, grid_index):
@@ -65,6 +71,15 @@ class Grid(GameModelList):
 		row = random.choice(self.grid)
 		block = random.choice(row)
 		return block
+
+	def get_random_line(self, line_length):
+		row = row = random.choice(self.grid)
+		line_start_index = random.choice(range(0, len(row) - line_length))
+		line_end_index = line_start_index + line_length
+		line_blocks = []
+		for i in range(line_start_index, line_end_index):
+			line_blocks.append(row[i])
+		return line_blocks
 
 	def inspect(self):
 		for block in self.get_game_models():
