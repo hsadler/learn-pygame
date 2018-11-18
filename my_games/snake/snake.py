@@ -6,6 +6,7 @@ from lib.model.game import Game
 from lib.model.grid import Grid
 from lib.model.block import Block
 from lib.model.snake import Snake
+from lib.model.wall import Wall
 
 from lib.business.game import GameBL
 
@@ -33,15 +34,15 @@ def main():
 	)
 	grid.initialize()
 
-	# create snake
-	rand_grid_line = grid.get_random_line(5)
-	snake = Snake(game=game, game_models=rand_grid_line)
-	snake.update()
-
 	# create wall
 	grid_parimeter = grid.get_parimeter()
-	print(grid_parimeter)
-	# wall = Wall(game=game, game_models=grid_parimeter)
+	wall = Wall(game=game, game_models=grid_parimeter)
+	wall.update()
+
+	# create snake
+	rand_grid_line = grid.get_random_line(config.SNAKE_START_LENGTH)
+	snake = Snake(game=game, game_models=rand_grid_line)
+	snake.update()
 
 	# initialize with entire display update
 	game.init_display()
