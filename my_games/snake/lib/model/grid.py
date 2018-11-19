@@ -35,7 +35,7 @@ class Grid(GameModelList):
 				row.append(block)
 				self.add_game_model(block)
 			self.grid.append(row)
-		self.occupied_blocks = {}
+		# self.occupied_blocks = {}
 
 	def initialize(self):
 		config = self.game.config
@@ -55,8 +55,8 @@ class Grid(GameModelList):
 				return row[x]
 		return None
 
-	def get_adjacent_block_from_selected(self, direction):
-		x, y = self.selected_block.get_grid_index()
+	def get_adjacent_block_from_block(self, block, direction):
+		x, y = block.get_grid_index()
 		if direction == self.DIRECTION_UP:
 			y = y - 1
 		elif direction == self.DIRECTION_DOWN:
