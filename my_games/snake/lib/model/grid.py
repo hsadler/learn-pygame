@@ -37,7 +37,7 @@ class Grid(GameModelList):
 			self.grid.append(row)
 		# self.occupied_blocks = {}
 
-	def initialize(self):
+	def update_all(self):
 		config = self.game.config
 		for block in self.get_game_models():
 			block.draw_color(

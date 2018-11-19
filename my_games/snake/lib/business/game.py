@@ -18,10 +18,10 @@ class GameBL():
 				if event.key == game.pygame.K_ESCAPE or event.unicode == 'q':
 					game.running = False
 
-		# update entire grid until optimized
-		grid.initialize()
+		# update entire grid (until optimized)
+		grid.update_all()
 
-		# update entire wall until optimized
+		# update entire wall (until optimized)
 		wall.update()
 
 		# move the snake

@@ -7,7 +7,6 @@ from lib.model.grid import Grid
 from lib.model.block import Block
 from lib.model.snake import Snake
 from lib.model.wall import Wall
-
 from lib.business.game import GameBL
 
 
@@ -32,7 +31,7 @@ def main():
 			config.GRID_HEIGHT_BLOCKS
 		)
 	)
-	grid.initialize()
+	grid.update_all()
 
 	# create wall
 	grid_parimeter = grid.get_parimeter()
