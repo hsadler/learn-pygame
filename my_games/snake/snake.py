@@ -53,6 +53,7 @@ def main():
 			config=config,
 			game=game,
 			grid=grid,
+			wall=wall,
 			snake=snake
 		)
 

@@ -7,7 +7,7 @@ import pygame
 class Config():
 
 	GAME_NAME = 'snake'
-	GAME_LOOP_RATE = 30
+	GAME_LOOP_RATE = 15
 
 	SCREEN_PX_WIDTH = 1000
 	SCREEN_PX_HEIGHT = 700

@@ -5,7 +5,7 @@
 class GameBL():
 
 	@staticmethod
-	def run(config, game, grid, snake):
+	def run(config, game, grid, wall, snake):
 		"""
 		game loop main method
 		"""
@@ -18,14 +18,26 @@ class GameBL():
 				if event.key == game.pygame.K_ESCAPE or event.unicode == 'q':
 					game.running = False
 
-		# # block selection based on user input
-		# direction = self.get_direction_from_user_input()
-		# if direction is not None:
-		# 	print('direction:')
-		# 	print(direction)
+		# update entire grid until optimized
+		grid.initialize()
 
-		# # lock game loop rate
-		# self.clock.tick(self.config.GAME_LOOP_RATE)
+		# update entire wall until optimized
+		wall.update()
+
+		# move the snake
+		head = snake.get_head()
+		new_head = grid.get_adjacent_block_from_block(
+			block=head,
+			direction=grid.DIRECTION_LEFT
+		)
+		snake.move_snake(new_head=new_head, remove_tail=True)
+		snake.update()
+
+		# do full update (until optimized)
+		game.pygame.display.update()
+
+		# lock game loop rate
+		game.clock.tick(config.GAME_LOOP_RATE)
 
 	def get_direction_from_user_input(self):
 		return None
@@ -33,7 +45,7 @@ class GameBL():
 	def init_display(self):
 		self.pygame.display.update()
 
-	def update_display(self):
+	def update_display(self, rects):
 		# TODO: pass rects to update()
 		self.pygame.display.update(rects)
 

@@ -12,8 +12,6 @@ class Snake(GameModelList):
 	# DIRECTION_RIGHT = 'right'
 
 	def __init__(self, game, game_models=[]):
-		if len(game_models) < 2:
-			return None
 		super().__init__(game=game, game_models=game_models)
 		self.head = {
 			'model': game_models[0],
@@ -44,12 +42,34 @@ class Snake(GameModelList):
 			block.update()
 
 	def get_head(self):
-		return self.head
+		return self.head['model']
 
 	def get_tail(self):
-		return self.tail
+		return self.tail['model']
+
+	def append_head(self, head_model):
+		new_head = {
+			'model': head_model,
+			'next': self.head,
+			'prev': None
+		}
+		self.head['prev'] = new_head
+		self.head = new_head
+		self.add_game_model(game_model=head_model)
+
+	def pop_tail(self):
+		new_tail = self.tail['prev']
+		old_tail = self.tail
+		old_tail['prev'] = None
+		self.tail = new_tail
+		self.remove_game_model(old_tail['model'])
+		return old_tail['model']
 
 	def move_snake(self, new_head, remove_tail=True):
-		pass
+		self.append_head(new_head)
+		if remove_tail:
+			return self.pop_tail()
+		else:
+			return None
 
 

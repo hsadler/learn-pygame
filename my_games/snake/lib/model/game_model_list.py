@@ -13,3 +13,6 @@ class GameModelList():
 
 	def get_game_models(self):
 		return self.game_models
+
+	def remove_game_model(self, game_model):
+		self.game_models.remove(game_model)
