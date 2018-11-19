@@ -4,8 +4,13 @@
 
 class GameBL():
 
-	@staticmethod
-	def run(config, game, grid, wall, snake):
+	DIRECTION_UP = 'up'
+	DIRECTION_DOWN = 'down'
+	DIRECTION_LEFT = 'left'
+	DIRECTION_RIGHT = 'right'
+
+	@classmethod
+	def run(cls, config, game, grid, wall, snake):
 		"""
 		game loop main method
 		"""
@@ -26,11 +31,15 @@ class GameBL():
 
 		# move the snake
 		head = snake.get_head()
-		new_head = grid.get_adjacent_block_from_block(
-			block=head,
-			direction=grid.DIRECTION_LEFT
-		)
-		snake.move_snake(new_head=new_head, remove_tail=True)
+		new_head = None
+		direction = cls.get_direction_from_user_input(game=game)
+		if direction is not None:
+			new_head = grid.get_adjacent_block_from_block(
+				block=head,
+				direction=direction
+			)
+		if new_head is not None:
+			snake.move_snake(new_head=new_head, remove_tail=True)
 		snake.update()
 
 		# do full update (until optimized)
@@ -39,7 +48,18 @@ class GameBL():
 		# lock game loop rate
 		game.clock.tick(config.GAME_LOOP_RATE)
 
-	def get_direction_from_user_input(self):
+	@classmethod
+	def get_direction_from_user_input(cls, game):
+		pygame = game.pygame
+		pressed = pygame.key.get_pressed()
+		if pressed[pygame.K_UP]:
+			return cls.DIRECTION_UP
+		elif pressed[pygame.K_RIGHT]:
+			return cls.DIRECTION_RIGHT
+		elif pressed[pygame.K_LEFT]:
+			return cls.DIRECTION_LEFT
+		elif pressed[pygame.K_DOWN]:
+			return cls.DIRECTION_DOWN
 		return None
 
 	def init_display(self):
