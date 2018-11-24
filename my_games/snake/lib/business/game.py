@@ -1,5 +1,7 @@
 
 # game business logic
+	# - manages game logic
+	# - manages user input
 
 
 class GameBL():
@@ -24,10 +26,10 @@ class GameBL():
 					game.running = False
 
 		# update entire grid (until optimized)
-		grid.update_all()
+		# grid.update_all_blocks()
 
 		# update entire wall (until optimized)
-		wall.update()
+		# wall.update()
 
 		# move the snake
 		head = snake.get_head()
@@ -38,12 +40,26 @@ class GameBL():
 				block=head,
 				direction=direction
 			)
+		removed_tail = None
 		if new_head is not None:
-			snake.move_snake(new_head=new_head, remove_tail=True)
+			removed_tail = snake.move_snake(new_head=new_head, remove_tail=True)
+		snake.draw()
 		snake.update()
 
+		# update occupied grid blocks
+		to_add = []
+		if new_head is not None:
+			to_add.append(new_head)
+		to_remove = []
+		if removed_tail is not None:
+			to_remove.append(removed_tail)
+		grid.update_occupied_blocks(
+			add=to_add,
+			remove=to_remove
+		)
+
 		# do full update (until optimized)
-		game.pygame.display.update()
+		# game.pygame.display.update()
 
 		# lock game loop rate
 		game.clock.tick(config.GAME_LOOP_RATE)
@@ -61,14 +77,4 @@ class GameBL():
 		elif pressed[pygame.K_DOWN]:
 			return cls.DIRECTION_DOWN
 		return None
-
-	def init_display(self):
-		self.pygame.display.update()
-
-	def update_display(self, rects):
-		# TODO: pass rects to update()
-		self.pygame.display.update(rects)
-
-	def clear_updated(self):
-		self.updated = []
 

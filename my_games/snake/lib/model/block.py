@@ -14,7 +14,10 @@ class Block(GameModel):
 		x_pos,
 		y_pos,
 		grid_index,
-		collidable=False
+		collidable=False,
+		color=None,
+		stroke_color=None,
+		stroke_width=None
 	):
 		super().__init__(
 			game=game,
@@ -25,20 +28,52 @@ class Block(GameModel):
 		)
 		self.grid_index = grid_index
 		self.collidable = collidable
+		self.color = color
+		self.stroke_color = stroke_color
+		self.stroke_width = stroke_width
 
-	def draw_color(self, color, stroke_color, stroke_width):
+	def draw(self):
 		# block stroke fill
 		stroke_rect = self.surface.get_rect()
-		self.surface.fill(color=stroke_color, rect=stroke_rect)
+		self.surface.fill(color=self.stroke_color, rect=stroke_rect)
 		# block color fill
 		block_color_rect = self.surface.get_rect().inflate(
-			stroke_width * -1,
-			stroke_width * -1
+			self.stroke_width * -1,
+			self.stroke_width * -1
 		)
-		self.surface.fill(color=color, rect=block_color_rect)
+		self.surface.fill(color=self.color, rect=block_color_rect)
 
 	def get_grid_index(self):
 		return self.grid_index
+
+	def set_collidable(self, prop_val=False):
+		self.collidable = prop_val
+
+	def get_collidable(self):
+		return self.collidable
+
+	def set_appearance(self, color, stroke_color, stroke_width):
+		self.set_color(color)
+		self.set_stroke_color(stroke_color)
+		self.set_stroke_width(stroke_width)
+
+	def set_color(self, color):
+		self.color = color
+
+	def get_color(self):
+		return self.color
+
+	def set_stroke_color(self, stroke_color):
+		self.stroke_color = stroke_color
+
+	def get_stroke_color(self):
+		return self.stroke_color
+
+	def set_stroke_width(self, stroke_width):
+		self.stroke_width = stroke_width
+
+	def get_stroke_width(self):
+		return self.stroke_width
 
 	def inspect(self):
 		print({

@@ -31,16 +31,27 @@ def main():
 			config.GRID_HEIGHT_BLOCKS
 		)
 	)
-	grid.update_all()
+	grid.initialize()
+	grid.update_all_blocks()
 
 	# create wall
 	grid_parimeter = grid.get_parimeter()
-	wall = Wall(game=game, game_models=grid_parimeter)
+	wall = Wall(
+		game=game,
+		game_models=grid_parimeter,
+		collidable=True,
+		block_color=config.WALL_BLOCK_COLOR
+	)
 	wall.update()
 
 	# create snake
 	rand_grid_line = grid.get_random_line(config.SNAKE_START_LENGTH)
-	snake = Snake(game=game, game_models=rand_grid_line)
+	snake = Snake(
+		game=game,
+		game_models=rand_grid_line,
+		collidable=True,
+		block_color=config.SNAKE_BLOCK_COLOR
+	)
 	snake.update()
 
 	# initialize with entire display update

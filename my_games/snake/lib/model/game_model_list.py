@@ -4,9 +4,17 @@
 
 class GameModelList():
 
-	def __init__(self, game, game_models=[]):
+	def __init__(
+		self,
+		game,
+		game_models=[],
+		collidable=False,
+		block_color=None
+	):
 		self.game = game
 		self.game_models = game_models
+		self.collidable = collidable
+		self.block_color = block_color
 
 	def add_game_model(self, game_model):
 		self.game_models.append(game_model)
@@ -16,3 +24,11 @@ class GameModelList():
 
 	def remove_game_model(self, game_model):
 		self.game_models.remove(game_model)
+
+	def draw(self):
+		for block in self.game_models:
+			block.draw()
+
+	def update(self):
+		for model in self.game_models:
+			model.update()

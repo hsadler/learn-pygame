@@ -4,6 +4,8 @@ from lib.model.game_model_list import GameModelList
 from lib.model.block import Block
 
 # game grid for holding block game objects
+	# - manages block collision detection
+	# - manages block updates to display
 
 
 class Grid(GameModelList):
@@ -35,16 +37,21 @@ class Grid(GameModelList):
 				row.append(block)
 				self.add_game_model(block)
 			self.grid.append(row)
-		# self.occupied_blocks = {}
+		self.occupied_blocks = {}
 
-	def update_all(self):
+	def initialize(self):
 		config = self.game.config
 		for block in self.get_game_models():
-			block.draw_color(
-				color=config.GRID_BLOCK_COLOR,
+			block.set_appearance(
+				color=config.NONE_BLOCK_COLOR,
 				stroke_color=config.BLOCK_STROKE_COLOR,
 				stroke_width=config.BLOCK_STROKE_PX_WIDTH
 			)
+			block.draw()
+
+	def update_all_blocks(self):
+		config = self.game.config
+		for block in self.get_game_models():
 			block.update()
 
 	def get_block_at_grid_index(self, grid_index):
@@ -91,6 +98,9 @@ class Grid(GameModelList):
 				left_blocks.append(row[0])
 				right_blocks.append(row[len(row) - 1])
 		return top_blocks + bottom_blocks + left_blocks + right_blocks
+
+	def update_occupied_blocks(self, add=[], remove=[]):
+		pass
 
 	def inspect(self):
 		for block in self.get_game_models():
