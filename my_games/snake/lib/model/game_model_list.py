@@ -25,6 +25,9 @@ class GameModelList():
 	def remove_game_model(self, game_model):
 		self.game_models.remove(game_model)
 
+	def get_block_color(self):
+		return self.block_color
+
 	def draw(self):
 		for block in self.game_models:
 			block.draw()

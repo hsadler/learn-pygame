@@ -21,11 +21,6 @@ class Wall(GameModelList):
 			collidable=collidable,
 			block_color=block_color
 		)
-		config = self.game.config
 		for block in self.game_models:
-			block.set_appearance(
-				color=self.block_color,
-				stroke_color=config.BLOCK_STROKE_COLOR,
-				stroke_width=config.BLOCK_STROKE_PX_WIDTH
-			)
+			block.set_color(self.block_color)
 			block.draw()

@@ -26,6 +26,7 @@ def main():
 			config.BLOCK_PX_WIDTH,
 			config.BLOCK_PX_HEIGHT
 		),
+		block_color=config.NONE_BLOCK_COLOR,
 		grid_dimensions=(
 			config.GRID_WIDTH_BLOCKS,
 			config.GRID_HEIGHT_BLOCKS

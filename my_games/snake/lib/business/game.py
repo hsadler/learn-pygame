@@ -25,12 +25,6 @@ class GameBL():
 				if event.key == game.pygame.K_ESCAPE or event.unicode == 'q':
 					game.running = False
 
-		# update entire grid (until optimized)
-		# grid.update_all_blocks()
-
-		# update entire wall (until optimized)
-		# wall.update()
-
 		# move the snake
 		head = snake.get_head()
 		new_head = None
@@ -40,26 +34,30 @@ class GameBL():
 				block=head,
 				direction=direction
 			)
-		removed_tail = None
+		removed_tail_model = None
 		if new_head is not None:
-			removed_tail = snake.move_snake(new_head=new_head, remove_tail=True)
-		snake.draw()
-		snake.update()
+			removed_tail_model = snake.move_snake(
+				new_head=new_head,
+				remove_tail=True
+			)
 
 		# update occupied grid blocks
 		to_add = []
 		if new_head is not None:
 			to_add.append(new_head)
 		to_remove = []
-		if removed_tail is not None:
-			to_remove.append(removed_tail)
+		if removed_tail_model is not None:
+			removed_tail_model.set_color(grid.get_block_color())
+			removed_tail_model.draw()
+			removed_tail_model.update()
+			to_remove.append(removed_tail_model)
 		grid.update_occupied_blocks(
 			add=to_add,
 			remove=to_remove
 		)
 
 		# do full update (until optimized)
-		# game.pygame.display.update()
+		game.pygame.display.update()
 
 		# lock game loop rate
 		game.clock.tick(config.GAME_LOOP_RATE)

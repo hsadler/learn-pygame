@@ -22,6 +22,9 @@ class Snake(GameModelList):
 			collidable=collidable,
 			block_color=block_color
 		)
+		for block in self.game_models:
+			block.set_color(self.block_color)
+			block.draw()
 		self.head = {
 			'model': game_models[0],
 			'next': None,
@@ -55,6 +58,9 @@ class Snake(GameModelList):
 		self.head['prev'] = new_head
 		self.head = new_head
 		self.add_game_model(game_model=head_model)
+		head_model.set_color(self.block_color)
+		head_model.draw()
+		head_model.update()
 
 	def pop_tail(self):
 		new_tail = self.tail['prev']

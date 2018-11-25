@@ -15,10 +15,18 @@ class Grid(GameModelList):
 	DIRECTION_LEFT = 'left'
 	DIRECTION_RIGHT = 'right'
 
-	def __init__(self, game, block_class, block_size, grid_dimensions):
+	def __init__(
+		self,
+		game,
+		block_class,
+		block_size,
+		block_color,
+		grid_dimensions
+	):
 		super().__init__(game=game)
 		self.Block = block_class
 		self.block_width_px, self.block_height_px = block_size
+		self.block_color = block_color
 		self.grid_width, self.grid_height = grid_dimensions
 		self.grid = []
 		for i in range(0, self.grid_height):
