@@ -61,8 +61,9 @@ def main():
 	game.init_display()
 
 	# game loop
+	game_bl = GameBL()
 	while game.get_running():
-		GameBL.run(
+		game_bl.run(
 			config=config,
 			game=game,
 			grid=grid,

@@ -11,8 +11,11 @@ class GameBL():
 	DIRECTION_LEFT = 'left'
 	DIRECTION_RIGHT = 'right'
 
-	@classmethod
-	def run(cls, config, game, grid, wall, snake):
+	def __init__(self):
+		self.cur_direction = self.DIRECTION_LEFT
+		self.game_over = False
+
+	def run(self, config, game, grid, wall, snake):
 		"""
 		game loop main method
 		"""
@@ -25,16 +28,21 @@ class GameBL():
 				if event.key == game.pygame.K_ESCAPE or event.unicode == 'q':
 					game.running = False
 
+		if self.game_over:
+			return False
+
 		# get current head
 		head = snake.get_head()
-		new_head = None
-		direction = cls.get_direction_from_user_input(game=game)
+		# get direction from user input or last direction
+		direction = self.get_direction_from_user_input(game=game)
+		direction = direction if direction is not None else self.cur_direction
+		self.cur_direction = direction
 		# get new snake head from user input direction
-		if direction is not None:
-			new_head = grid.get_adjacent_block_from_block(
-				block=head,
-				direction=direction
-			)
+		new_head = None
+		new_head = grid.get_adjacent_block_from_block(
+			block=head,
+			direction=direction
+		)
 		removed_tail_model = None
 		if new_head is not None:
 			# check for collision
@@ -42,7 +50,10 @@ class GameBL():
 				add=[ new_head ],
 				remove=[] # TODO: deal with tail removal later
 			)
-			if not collision:
+			if collision:
+				self.game_over = True
+				return False
+			else:
 				# move the snake
 				removed_tail_model = snake.move_snake(
 					new_head=new_head,
