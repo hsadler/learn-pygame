@@ -108,7 +108,29 @@ class Grid(GameModelList):
 		return top_blocks + bottom_blocks + left_blocks + right_blocks
 
 	def update_occupied_blocks(self, add=[], remove=[]):
-		pass
+		for block in add:
+			block_key = block.get_string_formatted_grid_index()
+			self.occupied_blocks[block_key] = block
+		for block in remove:
+			block_key = block.get_string_formatted_grid_index()
+			if block_key in self.occupied_blocks:
+				del self.occupied_blocks[block_key]
+
+	def check_collision(self, add=[], remove=[]):
+		occupied_blocks_copy = dict(self.occupied_blocks)
+		for block in remove:
+			block_key = block.get_string_formatted_grid_index()
+			if block_key in occupied_blocks_copy:
+				del occupied_blocks_copy[block_key]
+		for block in add:
+			block_key = block.get_string_formatted_grid_index()
+			if (
+				block_key in occupied_blocks_copy and
+				block.get_collidable() and
+				occupied_blocks_copy[block_key].get_collidable()
+			):
+				return True
+		return False
 
 	def inspect(self):
 		for block in self.get_game_models():

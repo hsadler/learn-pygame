@@ -26,7 +26,7 @@ class Config():
 	GRID_WIDTH_BLOCKS = int(SCREEN_PX_WIDTH / BLOCK_PX_WIDTH)
 	GRID_HEIGHT_BLOCKS = int(SCREEN_PX_HEIGHT / BLOCK_PX_HEIGHT)
 
-	SNAKE_START_LENGTH = 12
+	SNAKE_START_LENGTH = 30
 
 	def __init__(self):
 		self.pygame = pygame

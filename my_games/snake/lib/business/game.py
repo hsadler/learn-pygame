@@ -25,10 +25,11 @@ class GameBL():
 				if event.key == game.pygame.K_ESCAPE or event.unicode == 'q':
 					game.running = False
 
-		# move the snake
+		# get current head
 		head = snake.get_head()
 		new_head = None
 		direction = cls.get_direction_from_user_input(game=game)
+		# get new snake head from user input direction
 		if direction is not None:
 			new_head = grid.get_adjacent_block_from_block(
 				block=head,
@@ -36,10 +37,17 @@ class GameBL():
 			)
 		removed_tail_model = None
 		if new_head is not None:
-			removed_tail_model = snake.move_snake(
-				new_head=new_head,
-				remove_tail=True
+			# check for collision
+			collision = grid.check_collision(
+				add=[ new_head ],
+				remove=[] # TODO: deal with tail removal later
 			)
+			if not collision:
+				# move the snake
+				removed_tail_model = snake.move_snake(
+					new_head=new_head,
+					remove_tail=True
+				)
 
 		# update occupied grid blocks
 		to_add = []
@@ -51,10 +59,7 @@ class GameBL():
 			removed_tail_model.draw()
 			removed_tail_model.update()
 			to_remove.append(removed_tail_model)
-		grid.update_occupied_blocks(
-			add=to_add,
-			remove=to_remove
-		)
+		grid.update_occupied_blocks(add=to_add, remove=to_remove)
 
 		# do full update (until optimized)
 		game.pygame.display.update()

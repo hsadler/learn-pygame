@@ -24,10 +24,10 @@ class Block(GameModel):
 			surface=surface,
 			parent=parent,
 			x_pos=x_pos,
-			y_pos=y_pos
+			y_pos=y_pos,
+			collidable=collidable
 		)
 		self.grid_index = grid_index
-		self.collidable = collidable
 		self.color = color
 		self.stroke_color = stroke_color
 		self.stroke_width = stroke_width
@@ -45,12 +45,6 @@ class Block(GameModel):
 
 	def get_grid_index(self):
 		return self.grid_index
-
-	def set_collidable(self, prop_val=False):
-		self.collidable = prop_val
-
-	def get_collidable(self):
-		return self.collidable
 
 	def set_appearance(self, color, stroke_color, stroke_width):
 		self.set_color(color)
@@ -75,8 +69,13 @@ class Block(GameModel):
 	def get_stroke_width(self):
 		return self.stroke_width
 
+	def get_string_formatted_grid_index(self):
+		x, y = self.get_grid_index()
+		return "x={0}__y={1}".format(x, y)
+
 	def inspect(self):
 		print({
 			'rect':	self.get_pos_rect(),
-			'pos': [self.x, self.y]
+			'pos': [self.x, self.y],
+			'collidable': self.collidable
 		})

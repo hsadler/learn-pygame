@@ -43,6 +43,7 @@ def main():
 		collidable=True,
 		block_color=config.WALL_BLOCK_COLOR
 	)
+	grid.update_occupied_blocks(add=wall.get_game_models())
 	wall.update()
 
 	# create snake
@@ -53,6 +54,7 @@ def main():
 		collidable=True,
 		block_color=config.SNAKE_BLOCK_COLOR
 	)
+	grid.update_occupied_blocks(add=snake.get_game_models())
 	snake.update()
 
 	# initialize with entire display update

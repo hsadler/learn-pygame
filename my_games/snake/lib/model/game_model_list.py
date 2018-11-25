@@ -15,9 +15,12 @@ class GameModelList():
 		self.game_models = game_models
 		self.collidable = collidable
 		self.block_color = block_color
+		for model in self.game_models:
+			model.set_collidable(self.collidable)
 
 	def add_game_model(self, game_model):
 		self.game_models.append(game_model)
+		game_model.set_collidable(self.collidable)
 
 	def get_game_models(self):
 		return self.game_models

@@ -4,12 +4,13 @@
 
 class GameModel():
 
-	def __init__(self, game, surface, parent, x_pos, y_pos):
+	def __init__(self, game, surface, parent, x_pos, y_pos, collidable=False):
 		self.game = game
 		self.surface = surface
 		self.parent = parent
 		self.x = x_pos
 		self.y = y_pos
+		self.collidable = collidable
 
 	def move(self, x_amount, y_amount):
 		self.x += x_amount
@@ -25,3 +26,10 @@ class GameModel():
 				self.y + self.surface.get_height() / 2
 			)
 		)
+
+	def set_collidable(self, val):
+		self.collidable = val
+
+	def get_collidable(self):
+		return self.collidable
+
