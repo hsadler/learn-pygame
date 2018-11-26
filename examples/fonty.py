@@ -79,11 +79,11 @@ def main():
 
     ## #some_japanese_unicode = u"\u304b\u3070\u306b"
     ##some_japanese_unicode = unicode_('%c%c%c') % (0x304b, 0x3070, 0x306b)
-    
+
     #AA, transparancy, italic
     ##ren = a_sys_font.render(some_japanese_unicode, 1, fg)
     ##screen.blit(ren, (30 + size[0], 40 + size[1]))
-    
+
 
 
 
@@ -98,4 +98,4 @@ def main():
 
 
 if __name__ == '__main__': main()
-    
+

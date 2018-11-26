@@ -14,10 +14,17 @@ from lib.model.wall import Wall
 
 class GameBL():
 
+
+	GAME_STATE_PLAY = 'game-state-play'
+	GAME_STATE_CHECK_RESTART = 'game-state-check-restart'
+	GAME_STATE_RESTART = 'game-state-restart'
+
+
 	DIRECTION_UP = 'up'
 	DIRECTION_DOWN = 'down'
 	DIRECTION_LEFT = 'left'
 	DIRECTION_RIGHT = 'right'
+
 
 	def __init__(self, game):
 		self.game = game
@@ -26,6 +33,7 @@ class GameBL():
 		self.snake = None
 		self.cur_direction = self.DIRECTION_LEFT
 		self.game_over = False
+		self.game_state = self.GAME_STATE_PLAY
 
 
 	def init_new_game(self):
@@ -100,8 +108,8 @@ class GameBL():
 					self.game.set_running(False)
 					return False
 
-		if self.game_over:
-			self.game.set_running(False)
+		if self.game_state == self.GAME_STATE_CHECK_RESTART:
+			self.check_restart()
 			return False
 
 		# get current head
@@ -124,7 +132,7 @@ class GameBL():
 				remove=[] # TODO: deal with tail removal later
 			)
 			if collision:
-				self.game_over = True
+				self.game_state = self.GAME_STATE_CHECK_RESTART
 				return False
 			else:
 				# move the snake
@@ -150,6 +158,29 @@ class GameBL():
 
 		# lock game loop rate
 		self.game.clock.tick(config.GAME_LOOP_RATE)
+
+
+	def check_restart(self):
+		pygame = self.game.pygame
+		config = self.game.config
+		# write restart dialoge to screen
+		fg = 250, 240, 230
+		font = pygame.font.Font(None, 120)
+		text = 'Press "R" to restart'
+		size = font.size(text)
+		ren = font.render(text, 0, fg)
+		self.game.screen.blit(
+			ren,
+			(
+				config.SCREEN_PX_WIDTH/2 - size[0]/2,
+				config.SCREEN_PX_HEIGHT/2 - size[1]/2
+			)
+		)
+		# check for 'r' key input
+		pressed = pygame.key.get_pressed()
+		if pressed[pygame.K_r]:
+			self.game.set_running(False)
+		self.game.pygame.display.update()
 
 
 	def get_direction_from_user_input(self):
