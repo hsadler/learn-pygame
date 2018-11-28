@@ -93,11 +93,46 @@ class GameBL():
 		config = self.game.config
 
 		# exit event conditions
+		if self.check_game_exit_conditions():
+			return False
+
+		# display dialoge if game is in 'check restart' state
+		if self.game_state == self.GAME_STATE_CHECK_RESTART:
+			self.check_restart()
+			return False
+
+		# TODO: create food block if needed
+
+		# move snake
+		new_head, removed_tail_model = self.move_snake()
+
+		# TODO: check if snake ate food
+
+		# update occupied grid blocks
+		to_add = []
+		if new_head is not None:
+			to_add.append(new_head)
+		to_remove = []
+		if removed_tail_model is not None:
+			removed_tail_model.set_color(self.grid.get_block_color())
+			removed_tail_model.draw()
+			removed_tail_model.update()
+			to_remove.append(removed_tail_model)
+		self.grid.update_occupied_blocks(add=to_add, remove=to_remove)
+
+		# do full update (until optimized)
+		self.game.pygame.display.update()
+
+		# lock game loop rate
+		self.game.clock.tick(config.GAME_LOOP_RATE)
+
+
+	def check_game_exit_conditions(self):
 		for event in self.game.pygame.event.get():
 			if event.type == self.game.pygame.QUIT:
 				self.game.set_restart(False)
 				self.game.set_running(False)
-				return False
+				return True
 			if event.type == self.game.pygame.KEYDOWN:
 				if (
 					event.key == self.game.pygame.K_ESCAPE or
@@ -105,12 +140,11 @@ class GameBL():
 				):
 					self.game.set_restart(False)
 					self.game.set_running(False)
-					return False
+					return True
+		return False
 
-		if self.game_state == self.GAME_STATE_CHECK_RESTART:
-			self.check_restart()
-			return False
 
+	def move_snake(self):
 		# get current head
 		head = self.snake.get_head()
 		# get direction from user input or last direction
@@ -132,32 +166,14 @@ class GameBL():
 			)
 			if collision:
 				self.game_state = self.GAME_STATE_CHECK_RESTART
-				return False
+				return None, None
 			else:
 				# move the snake
 				removed_tail_model = self.snake.move_snake(
 					new_head=new_head,
 					remove_tail=True
 				)
-
-		# update occupied grid blocks
-		to_add = []
-		if new_head is not None:
-			to_add.append(new_head)
-		to_remove = []
-		if removed_tail_model is not None:
-			removed_tail_model.set_color(self.grid.get_block_color())
-			removed_tail_model.draw()
-			removed_tail_model.update()
-			to_remove.append(removed_tail_model)
-		self.grid.update_occupied_blocks(add=to_add, remove=to_remove)
-
-		# do full update (until optimized)
-		self.game.pygame.display.update()
-
-		# lock game loop rate
-		self.game.clock.tick(config.GAME_LOOP_RATE)
-
+		return new_head, removed_tail_model
 
 	def check_restart(self):
 		pygame = self.game.pygame
