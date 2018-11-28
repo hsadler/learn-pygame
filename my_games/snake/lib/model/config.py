@@ -28,6 +28,9 @@ class Config():
 
 	SNAKE_START_LENGTH = 20
 
+	RESTART_TEXT_SIZE = 120
+	RESTART_TEXT_COLOR = pygame.Color('gray80')
+
 	def __init__(self):
 		self.pygame = pygame
 		self.pygame.init()

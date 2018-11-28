@@ -15,9 +15,8 @@ from lib.model.wall import Wall
 class GameBL():
 
 
-	GAME_STATE_PLAY = 'game-state-play'
+	GAME_STATE_PLAY = 'gameame-state-play'
 	GAME_STATE_CHECK_RESTART = 'game-state-check-restart'
-	GAME_STATE_RESTART = 'game-state-restart'
 
 
 	DIRECTION_UP = 'up'
@@ -72,10 +71,10 @@ class GameBL():
 		self.wall.update()
 
 		# create snake
-		rand_grid_line = self.grid.get_random_line(config.SNAKE_START_LENGTH)
+		grid_line = self.grid.get_center_horiz_line(config.SNAKE_START_LENGTH)
 		self.snake = Snake(
 			game=self.game,
-			game_models=rand_grid_line,
+			game_models=grid_line,
 			collidable=True,
 			block_color=config.SNAKE_BLOCK_COLOR
 		)
@@ -164,11 +163,10 @@ class GameBL():
 		pygame = self.game.pygame
 		config = self.game.config
 		# write restart dialoge to screen
-		fg = 250, 240, 230
-		font = pygame.font.Font(None, 120)
+		font = pygame.font.Font(None, config.RESTART_TEXT_SIZE)
 		text = 'Press "R" to restart'
 		size = font.size(text)
-		ren = font.render(text, 0, fg)
+		ren = font.render(text, 0, config.RESTART_TEXT_COLOR)
 		self.game.screen.blit(
 			ren,
 			(

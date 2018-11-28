@@ -88,13 +88,16 @@ class Grid(GameModelList):
 		return block
 
 	def get_random_line(self, line_length):
-		row = row = random.choice(self.grid)
+		row = random.choice(self.grid)
 		line_start_index = random.choice(range(0, len(row) - line_length))
 		line_end_index = line_start_index + line_length
-		line_blocks = []
-		for i in range(line_start_index, line_end_index):
-			line_blocks.append(row[i])
-		return line_blocks
+		return row[line_start_index:line_end_index]
+
+	def get_center_horiz_line(self, line_length):
+		row = self.grid[int(len(self.grid) / 2)]
+		line_start_index = int(len(row) / 2) - int(line_length / 2)
+		line_end_index = line_start_index + line_length
+		return row[line_start_index:line_end_index]
 
 	def get_parimeter(self):
 		top_blocks = self.grid[0]
