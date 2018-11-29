@@ -19,8 +19,6 @@ class GameBL():
 	GAME_STATE_PLAY = 'gameame-state-play'
 	GAME_STATE_CHECK_RESTART = 'game-state-check-restart'
 
-	SNAKE_FOOD_COUNTDOWN = 5
-
 	DIRECTION_UP = 'up'
 	DIRECTION_DOWN = 'down'
 	DIRECTION_LEFT = 'left'
@@ -33,7 +31,7 @@ class GameBL():
 		self.wall = None
 		self.snake = None
 		self.food = None
-		self.food_countdown = self.SNAKE_FOOD_COUNTDOWN
+		self.food_countdown = self.game.config.SNAKE_FOOD_COUNTDOWN
 		self.cur_direction = self.DIRECTION_LEFT
 		self.game_over = False
 		self.game_state = self.GAME_STATE_PLAY
@@ -116,7 +114,7 @@ class GameBL():
 			# feed snake and reset food properties
 			self.snake.feed()
 			self.food = None
-			self.food_countdown = self.SNAKE_FOOD_COUNTDOWN
+			self.food_countdown = config.SNAKE_FOOD_COUNTDOWN
 
 		# update occupied grid blocks
 		to_add = []
@@ -195,10 +193,7 @@ class GameBL():
 				return None, None
 			else:
 				# move the snake
-				removed_tail_model = self.snake.move_snake(
-					new_head=new_head,
-					remove_tail=True
-				)
+				removed_tail_model = self.snake.move_snake(new_head=new_head)
 		return new_head, removed_tail_model
 
 	def check_restart(self):

@@ -22,6 +22,7 @@ class Snake(GameModelList):
 			collidable=collidable,
 			block_color=block_color
 		)
+		self.fed_countdown = self.game.config.SNAKE_FED_DURATION
 		for block in self.game_models:
 			block.set_color(self.block_color)
 			block.draw()
@@ -70,15 +71,14 @@ class Snake(GameModelList):
 		self.remove_game_model(old_tail['model'])
 		return old_tail['model']
 
-	def move_snake(self, new_head, remove_tail=True):
+	def move_snake(self, new_head):
 		self.append_head(new_head)
-		if remove_tail:
-			return self.pop_tail()
-		else:
+		if self.fed_countdown > 0:
+			self.fed_countdown -= 1
 			return None
+		else:
+			return self.pop_tail()
 
 	def feed(self):
-		print('snake fed!')
-		pass
-
+		self.fed_countdown = self.game.config.SNAKE_FED_DURATION
 
