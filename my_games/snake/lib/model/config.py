@@ -7,7 +7,7 @@ import pygame
 class Config():
 
 	GAME_NAME = 'snake'
-	GAME_LOOP_RATE = 15
+	GAME_LOOP_RATE = 12
 
 	SCREEN_PX_WIDTH = 1000
 	SCREEN_PX_HEIGHT = 700
@@ -22,6 +22,7 @@ class Config():
 	NONE_BLOCK_COLOR = pygame.Color('gray30')
 	WALL_BLOCK_COLOR = pygame.Color('gray20')
 	SNAKE_BLOCK_COLOR = pygame.Color('green')
+	FOOD_BLOCK_COLOR = pygame.Color('yellow')
 
 	GRID_WIDTH_BLOCKS = int(SCREEN_PX_WIDTH / BLOCK_PX_WIDTH)
 	GRID_HEIGHT_BLOCKS = int(SCREEN_PX_HEIGHT / BLOCK_PX_HEIGHT)

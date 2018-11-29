@@ -3,6 +3,7 @@ from lib.model.game import Game
 from lib.model.grid import Grid
 from lib.model.block import Block
 from lib.model.snake import Snake
+from lib.model.food import Food
 from lib.model.wall import Wall
 
 
@@ -18,6 +19,7 @@ class GameBL():
 	GAME_STATE_PLAY = 'gameame-state-play'
 	GAME_STATE_CHECK_RESTART = 'game-state-check-restart'
 
+	SNAKE_FOOD_COUNTDOWN = 5
 
 	DIRECTION_UP = 'up'
 	DIRECTION_DOWN = 'down'
@@ -30,6 +32,8 @@ class GameBL():
 		self.grid = None
 		self.wall = None
 		self.snake = None
+		self.food = None
+		self.food_countdown = self.SNAKE_FOOD_COUNTDOWN
 		self.cur_direction = self.DIRECTION_LEFT
 		self.game_over = False
 		self.game_state = self.GAME_STATE_PLAY
@@ -101,12 +105,18 @@ class GameBL():
 			self.check_restart()
 			return False
 
-		# TODO: create food block if needed
+		# create food block if needed
+		self.try_create_food()
 
 		# move snake
 		new_head, removed_tail_model = self.move_snake()
 
-		# TODO: check if snake ate food
+		# check if snake ate food
+		if self.food is not None and new_head == self.food.get_block():
+			# feed snake and reset food properties
+			self.snake.feed()
+			self.food = None
+			self.food_countdown = self.SNAKE_FOOD_COUNTDOWN
 
 		# update occupied grid blocks
 		to_add = []
@@ -142,6 +152,22 @@ class GameBL():
 					self.game.set_running(False)
 					return True
 		return False
+
+
+	def try_create_food(self):
+		if self.food is None:
+			if self.food_countdown == 0:
+				# create the food
+				rand_block = self.grid.get_rand_avail_block()
+				self.food = Food(
+					game=self.game,
+					game_model=rand_block,
+					collidable=False,
+					block_color=self.game.config.FOOD_BLOCK_COLOR
+				)
+				self.food.update()
+			else:
+				self.food_countdown -= 1
 
 
 	def move_snake(self):

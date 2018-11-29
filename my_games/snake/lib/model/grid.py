@@ -87,6 +87,15 @@ class Grid(GameModelList):
 		block = random.choice(row)
 		return block
 
+	def get_rand_avail_block(self):
+		selected_block = None
+		while selected_block is None:
+			rand_block = self.get_random_block()
+			rand_block_key = rand_block.get_string_formatted_grid_index()
+			if rand_block_key not in self.occupied_blocks:
+				selected_block = rand_block
+		return selected_block
+
 	def get_random_line(self, line_length):
 		row = random.choice(self.grid)
 		line_start_index = random.choice(range(0, len(row) - line_length))

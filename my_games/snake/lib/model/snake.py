@@ -77,4 +77,8 @@ class Snake(GameModelList):
 		else:
 			return None
 
+	def feed(self):
+		print('snake fed!')
+		pass
+
 
