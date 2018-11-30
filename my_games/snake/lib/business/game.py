@@ -196,6 +196,7 @@ class GameBL():
 				removed_tail_model = self.snake.move_snake(new_head=new_head)
 		return new_head, removed_tail_model
 
+
 	def check_restart(self):
 		pygame = self.game.pygame
 		config = self.game.config

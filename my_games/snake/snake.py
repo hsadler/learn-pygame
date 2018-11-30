@@ -19,6 +19,7 @@ def main():
 		while game.get_running():
 			game_bl.run_game_loop()
 
+	# while restart is active, run the game
 	while game.get_restart():
 		run_game()
 

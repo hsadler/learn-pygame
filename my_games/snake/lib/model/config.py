@@ -14,8 +14,8 @@ class Config():
 
 	BG_COLOR = pygame.Color('black')
 
-	BLOCK_PX_WIDTH = 10
-	BLOCK_PX_HEIGHT = 10
+	BLOCK_PX_WIDTH = 20
+	BLOCK_PX_HEIGHT = 20
 	BLOCK_STROKE_COLOR = pygame.Color('black')
 	BLOCK_STROKE_PX_WIDTH = 1
 
