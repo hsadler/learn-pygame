@@ -172,8 +172,13 @@ class GameBL():
 		# get current head
 		head = self.snake.get_head()
 		# get direction from user input or last direction
+		# TODO: FIX, THIS SOLUTION IS JANKY
 		direction = self.get_direction_from_user_input()
-		direction = direction if direction is not None else self.cur_direction
+		if (
+			direction is None or
+			self.is_direction_opposite(self.cur_direction, direction)
+		):
+			direction = self.cur_direction
 		self.cur_direction = direction
 		# get new snake head from user input direction
 		new_head = None
@@ -231,4 +236,15 @@ class GameBL():
 		elif pressed[pygame.K_DOWN]:
 			return self.DIRECTION_DOWN
 		return None
+
+	def is_direction_opposite(self, cur_direction, new_direction):
+		opposite_map = {
+			self.DIRECTION_UP: self.DIRECTION_DOWN,
+			self.DIRECTION_DOWN: self.DIRECTION_UP,
+			self.DIRECTION_RIGHT: self.DIRECTION_LEFT,
+			self.DIRECTION_LEFT: self.DIRECTION_RIGHT
+		}
+		opposite = opposite_map[cur_direction]
+		return opposite == new_direction
+
 
