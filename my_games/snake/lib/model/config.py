@@ -31,6 +31,9 @@ class Config():
 	SNAKE_FOOD_COUNTDOWN = 10
 	SNAKE_FED_DURATION = 5
 
+	POINTS_TEXT_SIZE = 200
+	POINTS_TEXT_COLOR = pygame.Color('gray80')
+
 	RESTART_TEXT_SIZE = 120
 	RESTART_TEXT_COLOR = pygame.Color('gray80')
 
