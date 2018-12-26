@@ -5,6 +5,7 @@ from lib.model.block import Block
 from lib.model.snake import Snake
 from lib.model.food import Food
 from lib.model.wall import Wall
+from lib.model.points_display import PointsDisplay
 
 
 # game business logic
@@ -35,7 +36,6 @@ class GameBL():
 		self.cur_direction = self.DIRECTION_LEFT
 		self.game_over = False
 		self.game_state = self.GAME_STATE_PLAY
-		self.points_surface = game.screen.copy()
 
 
 	def init_new_game(self):
@@ -84,8 +84,12 @@ class GameBL():
 		self.grid.update_occupied_blocks(add=self.snake.get_game_models())
 		self.snake.update()
 
-		# initialize player points
-		self.init_player_points()
+		# player points display
+		self.points_display = PointsDisplay(
+			game=self.game,
+			x_pos=0,
+			y_pos=0
+		)
 
 		# initialize with entire display update
 		self.game.init_display()
@@ -117,7 +121,7 @@ class GameBL():
 		if self.food is not None and new_head == self.food.get_block():
 			# feed snake, add point, and reset food properties
 			self.snake.feed()
-			self.increment_and_display_points()
+			self.points_display.increment_points()
 			self.food = None
 			self.food_countdown = config.SNAKE_FOOD_COUNTDOWN
 
@@ -132,6 +136,12 @@ class GameBL():
 			removed_tail_model.update()
 			to_remove.append(removed_tail_model)
 		self.grid.update_occupied_blocks(add=to_add, remove=to_remove)
+
+		# update entire grid
+		self.grid.update_all_blocks()
+
+		# update points display
+		self.points_display.draw()
 
 		# do full update (until optimized)
 		self.game.pygame.display.flip()
@@ -229,32 +239,6 @@ class GameBL():
 		self.game.pygame.display.flip()
 
 
-	def init_player_points(self):
-		self.player_points = 0
-
-
-	def increment_and_display_points(self):
-		pygame = self.game.pygame
-		config = self.game.config
-		self.player_points += 1
-		# write points to screen
-		font = pygame.font.Font(None, config.RESTART_TEXT_SIZE)
-		text = '{0}'.format(self.player_points)
-		size = font.size(text)
-		ren = font.render(text, 0, config.RESTART_TEXT_COLOR)
-		self.game.screen.blit(
-			ren,
-			(
-				config.SCREEN_PX_WIDTH/2 - size[0]/2,
-				config.SCREEN_PX_HEIGHT/2 - size[1]/2
-			)
-		)
-
-
-	def clear_points_display(self):
-		pass
-
-
 	def get_direction_from_user_input(self):
 		pygame = self.game.pygame
 		pressed = pygame.key.get_pressed()
@@ -267,6 +251,7 @@ class GameBL():
 		elif pressed[pygame.K_DOWN]:
 			return self.DIRECTION_DOWN
 		return None
+
 
 	def is_direction_opposite(self, cur_direction, new_direction):
 		opposite_map = {
