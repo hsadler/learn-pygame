@@ -220,16 +220,32 @@ class GameBL():
 	def check_restart(self):
 		pygame = self.game.pygame
 		config = self.game.config
-		# write restart dialoge to screen
+		# get font
 		font = pygame.font.Font(None, config.RESTART_TEXT_SIZE)
-		text = 'Press "R" to restart'
-		size = font.size(text)
-		ren = font.render(text, 0, config.RESTART_TEXT_COLOR)
+		# write score text
+		score_text = 'Score: {0}'.format(
+			self.points_display.get_points()
+		)
+		# size = font.size(score_text)
+		text_width, text_height = font.size(score_text)
+		ren = font.render(score_text, 0, config.RESTART_TEXT_COLOR)
 		self.game.screen.blit(
 			ren,
 			(
-				config.SCREEN_PX_WIDTH/2 - size[0]/2,
-				config.SCREEN_PX_HEIGHT/2 - size[1]/2
+				config.SCREEN_PX_WIDTH/2 - text_width/2,
+				config.SCREEN_PX_HEIGHT/2 - text_height - text_height/2
+			)
+		)
+		# write restart text
+		restart_text = 'Press "R" to restart'
+		# size = font.size(restart_text)
+		text_width, text_height = font.size(restart_text)
+		ren = font.render(restart_text, 0, config.RESTART_TEXT_COLOR)
+		self.game.screen.blit(
+			ren,
+			(
+				config.SCREEN_PX_WIDTH/2 - text_width/2,
+				config.SCREEN_PX_HEIGHT/2 + text_height - text_height/2
 			)
 		)
 		# check for 'r' key input
